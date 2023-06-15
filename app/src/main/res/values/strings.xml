@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Eco-Tourism</string>
+    <string name="desc_onboarding1">Selamat datang di aplikasi <b>Eco-Tourism!</b> Nikmati pengalaman perjalanan yang tak terlupakan dengan panduan wisata kami yang lengkap dan informasi menarik tentang destinasi populer di seluruh Indonesia.</string>
+    <string name="desc_onboarding2">Dengan aplikasi ini, Anda akan menjelajahi tempat-tempat menakjubkan yang belum pernah Anda kunjungi sebelumnya. Temukan keindahan alam, warisan budaya, dan kuliner khas setiap tujuan wisata Anda.</string>
+    <string name="desc_onboarding3">Ayo mulai petualangan Anda! Aplikasi <b>Eco-Tourism!</b> kami menyajikan informasi terkini tentang destinasi populer, rekomendasi aktivitas seru. Bersiaplah untuk menjelajahi dunia dengan cara baru.</string>
+    <string name="lewati">Lewati</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="tittle_login">Hai Selamat Datang Kembali !</string>
+    <string name="logout">Logout</string>
+    <string name="village_name">Village Name</string>
+    <string name="recommendation">Recommendation</string>
+    <string name="village_description">Deskripsi Desa</string>
+    <string name="register_username">Full Name</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Password</string>
+    <string name="ussername">Ussername</string>
+    <string name="hobi">Hobi</string>
+    <string name="title_register">Registrate yourself !</string>
+    <string name="form_error">"Email and password required"</string>
+    <string name="email_error">Masukkan Email yang valid</string>
+    <string name="password_error">Password harus lebih dari 8 karakter</string>
+    <string name="profile">Profile</string>
+    <string name="title_activity_location">LocationActivity</string>
+    <string name="profile_mode_gelap">Mode Gelap</string>
+    <string name="login">Login</string>
+    <string name="tv_header">Welcome to the Eco-Tourism app enjoy your excitement</string>
+    <string name="welcome">WELCOME</string>
+    <string name="eco_tourism">ECO-TOURISM</string>
+    <string name="not_have_account">Don\'t have an account yet?</string>
+    <string name="register">Register</string>
+    <string name="full_name">Full Name</string>
+    <string name="gender">Gender</string>
+    <string name="address">Address</string>
+    <string name="contact">Contact</string>
+
+    <string-array name="list_gender">
+        <item>-- SELECT GENDER --</item>
+        <item>MEN</item>
+        <item>WOMAN</item>
+    </string-array>
+</resources>

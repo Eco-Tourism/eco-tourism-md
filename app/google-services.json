@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "177164408721",
+    "project_id": "backend-dasar",
+    "storage_bucket": "backend-dasar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177164408721:android:d217c236b951e8fe8e2c30",
+        "android_client_info": {
+          "package_name": "com.id.etourism"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177164408721-vprj4t6bvpjb1l2f8qgnaulj1664gtjf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.id.etourism",
+            "certificate_hash": "60f95f7f6cddca51aedc09024dec6427c40e445a"
+          }
+        },
+        {
+          "client_id": "177164408721-vnjuk1fmqjveltr508fs7r7halc7367j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeODh1l4Co_micgzRgoXEjBGawZOvcZtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177164408721-hm5rnjgdqeus603q4vskg9n9tskdrq24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
