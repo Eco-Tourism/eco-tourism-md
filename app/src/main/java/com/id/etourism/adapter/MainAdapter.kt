@@ -27,12 +27,13 @@ class MainAdapter(private var wisata: List<Wisata>) : RecyclerView.Adapter<MainA
             binding.root.setOnClickListener {
                 wisata.Place_Id?.let { it1 -> onItemClickCallback?.onItemClicked(wisata, it1) }
             }
+            val splitdata = wisata.Rating.toString()
             binding.apply {
                 Glide.with(itemView)
                     .load(wisata.Image)
                     .into(imgDestination)
                 tvVillageName.text = wisata.Place_Name
-                tvRating.text = wisata.Rating.toString()
+                tvRating.text = "${splitdata[2]}.${splitdata[3]}"
                 tvDescription.text = wisata.Description
             }
         }

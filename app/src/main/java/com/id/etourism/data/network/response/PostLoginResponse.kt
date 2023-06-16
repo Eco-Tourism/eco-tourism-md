@@ -29,5 +29,11 @@ data class PostLoginResponse(
 	val username: String? = null,
 
 	@field:SerializedName("alamat")
-	val alamat: String? = null
+	val alamat: String? = null,
+
+	@field:SerializedName("kota")
+	val kota: Int? = null,
+
+	@field:SerializedName("suasana")
+	val suasana: Int? = null
 )

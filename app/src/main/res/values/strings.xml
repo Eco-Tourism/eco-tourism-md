@@ -33,10 +33,24 @@
     <string name="gender">Gender</string>
     <string name="address">Address</string>
     <string name="contact">Contact</string>
+    <string name="kuesioern_ask">Which area did you like the most so far?</string>
+    <string name="kuesioner_suasana">Do you prefer places that highlight local culture or local scenery?</string>
 
     <string-array name="list_gender">
         <item>-- SELECT GENDER --</item>
         <item>MEN</item>
         <item>WOMAN</item>
+    </string-array>
+
+    <string-array name="list_kuesioenr_place">
+        <item>Jakarta</item>
+        <item>Yogyakarta</item>
+        <item>Bandung</item>
+        <item>Semarang</item>
+    </string-array>
+
+    <string-array name="list_kuesioenr_budaya">
+        <item>Culture</item>
+        <item>View</item>
     </string-array>
 </resources>

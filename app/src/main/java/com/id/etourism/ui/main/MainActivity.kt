@@ -2,7 +2,6 @@ package com.id.etourism.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -11,28 +10,33 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.id.etourism.R
 import com.id.etourism.adapter.MainAdapter
+import com.id.etourism.data.local.SessionManager
 import com.id.etourism.data.network.model.Wisata
 import com.id.etourism.databinding.ActivityMainBinding
 import com.id.etourism.data.local.dummy.DummyData
-import com.id.etourism.ml.ModelCitcat
 import com.id.etourism.ui.detail.DetailActivity
 import com.id.etourism.ui.profile.ProfileActivity
 import com.id.etourism.utils.ExceptionState
 import dagger.hilt.android.AndroidEntryPoint
-import org.tensorflow.lite.DataType
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import org.tensorflow.lite.Interpreter
 import timber.log.Timber
+import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.LongBuffer
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var menu: Menu? = null
+    @Inject lateinit var sessionManager: SessionManager
     private lateinit var binding : ActivityMainBinding
     private val viewmodel : MainViewModel by viewModels()
     private lateinit var adapter: MainAdapter
-    private lateinit var wisata: ArrayList<Wisata>
+    private val wisata = arrayListOf<Wisata>()
     private var predictions :FloatArray? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.bg_action_bar))
         val layoutManager = LinearLayoutManager(this)
         binding.rvVillage.layoutManager = layoutManager
-        wisata = ArrayList()
         adapter = MainAdapter(wisata)
         binding.rvVillage.adapter = adapter
         initUi()
@@ -98,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     Timber.e("model data $fixData")
                     try {
-                        modelTflite(fixData)
+                        modelTflite(wisata)
                     }catch (e:Exception){
                         e.printStackTrace()
                     }
@@ -116,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                     })
                     adapter.setOnItemClickCallback(object : MainAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: Wisata,id:Long) {
+                            val splitdata = data.Rating.toString()
                             val extras = Bundle()
                             val intent = Intent(this@MainActivity,DetailActivity::class.java)
                             extras.putString(EXTRA_IMAGE,data.Image)
@@ -123,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                             extras.putString(EXTRA_CATEGORY,data.Category)
                             extras.putString(EXTRA_LOCATION,data.Coordinate)
                             extras.putString(EXTRA_ADDRESS,data.City)
-                            extras.putString(EXTRA_RATING,data.Rating.toString())
+                            extras.putString(EXTRA_RATING,"${splitdata[2]}.${splitdata[3]}")
                             extras.putString(EXTRA_DESCRIPTION,data.Description)
                                 intent.putExtras(extras)
                             startActivity(intent)
@@ -158,25 +162,26 @@ class MainActivity : AppCompatActivity() {
         const val EXTRA_DESCRIPTION = "extra_description"
         const val EXTRA_IMAGE = "extra_image"
     }
-    private fun modelTflite(inputArray: ArrayList<ArrayList<Float>>) {
+    private fun modelTflite(inputArray: ArrayList<Wisata>) {
+        /**
+         *
+         *
         val model = ModelCitcat.newInstance(this)
         val dummyData = arrayListOf<ArrayList<Float>>()
         dummyData.add(arrayListOf(1f,0f))
         val numRows = dummyData.size
         val numCols = dummyData[0].size
         val totalElements = dummyData.size * dummyData[0].size
-        val byteBuffer = ByteBuffer.allocateDirect(totalElements * 8)
+        val byteBuffer = ByteBuffer.allocateDirect(totalElements * 4)
         byteBuffer.order(ByteOrder.nativeOrder())
-
         for (row in dummyData) {
-            for (value in row) {
-                byteBuffer.putFloat(value)
-            }
+        for (value in row) {
+        byteBuffer.putFloat(value)
         }
-
+        }
         Timber.tag("check1").e(byteBuffer.toString())
         // Creates inputs for reference.
-        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, numRows), DataType.FLOAT32)
+        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, numRows,numCols), DataType.FLOAT32)
         inputFeature0.loadBuffer(byteBuffer)
 
         Timber.tag("check2").e(byteBuffer.toString() + "dan ${inputFeature0.buffer} check $totalElements")
@@ -188,20 +193,44 @@ class MainActivity : AppCompatActivity() {
         Timber.e("result $predictions")
         // Releases model resources if no longer used.
         model.close()
+         */
+        val interpreter = Interpreter(loadModelFile())
+        val inputData = longArrayOf(sessionManager.dataLogin?.kota!!.toLong(), sessionManager.dataLogin?.suasana!!.toLong())
+        val inputBuffer: ByteBuffer = ByteBuffer.allocateDirect(inputData.size * 8)
+        inputBuffer.order(ByteOrder.nativeOrder())
+        val inputLongBuffer: LongBuffer = inputBuffer.asLongBuffer()
+        inputLongBuffer.put(inputData)
+        val inputTensorIndex = 0
+        val inputShape = interpreter.getInputTensor(inputTensorIndex).shape()
+        require(inputShape.size == 2 && inputShape[1] == inputData.size)
+        inputBuffer.rewind()
+        val outputTensorIndex = 0
+        val outputShape = interpreter.getOutputTensor(outputTensorIndex).shape()
+        val outputBuffer = Array(1) { FloatArray(outputShape[1]) }
+        interpreter.run(inputBuffer, outputBuffer)
+        val recommendationScores = outputBuffer[0]
+        Timber.tag("recomend").e(recommendationScores.toString())
+        Timber.tag("datasebelum").e(wisata[0].Rating.toString())
+//        for (score in recommendationScores) {
+//            Timber.tag("output").e("Recommendation score: $score")
+//            wisata.forEach {
+//                it.Rating = score.toDouble()
+//            }
+//        }
+        recommendationScores.forEachIndexed { index, fl ->
+            wisata[index].Rating = fl.toDouble()
+        }
+        Timber.tag("datasetelah").e(wisata[0].Rating.toString())
+        adapter.notifyDataSetChanged()
     }
 
-//    val model = ModelCitcat.newInstance(context)
-//
-//    // Creates inputs for reference.
-//    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 3), DataType.INT64)
-//    inputFeature0.loadBuffer(byteBuffer)
-//
-//    // Runs model inference and gets result.
-//    val outputs = model.process(inputFeature0)
-//    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-//
-//// Releases model resources if no longer used.
-//    model.close()
-
+    private fun loadModelFile(): MappedByteBuffer {
+        val assetFileDescriptor = assets.openFd("model-citcat.tflite")
+        val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
+        val fileChannel = inputStream.channel
+        val startOffset = assetFileDescriptor.startOffset
+        val declaredLength = assetFileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+    }
 
 }

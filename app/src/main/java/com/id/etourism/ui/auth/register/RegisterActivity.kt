@@ -42,6 +42,8 @@ class RegisterActivity : AppCompatActivity() {
     private var handler = Handler(Looper.getMainLooper())
     private val registerViewModel : RegisterViewModel by viewModels()
     private var selectedGender: String = ""
+    private var selectedKsuasana: Int = 0
+    private var selectedKdaerah: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +59,8 @@ class RegisterActivity : AppCompatActivity() {
     private fun initUi() {
         supportActionBar?.hide()
         setupGenderSpinner()
+        setupDaerahSpinner()
+        setupSuasanaSpinner()
         initDialog()
         initAction()
         initObserve()
@@ -112,7 +116,9 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             sessionManager.formatDataRegister = FormatDataRegister(email = email, hobi = hobi,
-                password = password, alamat = alamat, namalengkap = name, kontak = kontak, username=ussername, jeniskelamin = selectedGender )
+                password = password, alamat = alamat, namalengkap = name, kontak = kontak, username=ussername, jeniskelamin = selectedGender,
+                kota = selectedKdaerah, suasana = selectedKsuasana
+                )
             registerViewModel.register(
                 Gson().fromJson(Gson().toJson(sessionManager.formatDataRegister), JsonObject::class.java)
             )
@@ -122,6 +128,46 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun setupSuasanaSpinner() {
+        val suasanaSpinnerAdapter = ArrayAdapter.createFromResource(
+            this, R.array.list_kuesioenr_budaya,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        binding.spinKSuasana.adapter = suasanaSpinnerAdapter
+        binding.spinKSuasana.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedKsuasana = position
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun setupDaerahSpinner() {
+        val daerahSpinnerAdapter = ArrayAdapter.createFromResource(
+            this, R.array.list_kuesioenr_place,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        binding.spinKdaerah.adapter = daerahSpinnerAdapter
+        binding.spinKdaerah.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedKdaerah = position
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
     private fun setupGenderSpinner() {
         val genderSpinnerAdapter = ArrayAdapter.createFromResource(
             this, R.array.list_gender,

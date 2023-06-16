@@ -126,7 +126,7 @@
                         android:id="@+id/tvEmailLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/login_username" />
+                        android:text="@string/register_email" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tiEmail"
@@ -143,7 +143,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/default_height"
                             android:background="@drawable/bg_white_xl_border_divider_rounded"
-                            android:hint="@string/login_username"
+                            android:hint="@string/register_email"
                             android:imeActionLabel="@string/login_username"
                             android:imeOptions="actionNext"
                             android:inputType="textEmailAddress"
@@ -399,6 +399,60 @@
 
 
 
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llcFormKuesionerDaerah"
+                    android:layout_width="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llcFormNoTelpContainer"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/kuesioern_ask"/>
+
+
+                    <Spinner
+                        android:id="@+id/spinKdaerah"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_height"
+                        android:background="@drawable/bg_spinner_white_accent_border_rounded"
+                        android:paddingHorizontal="@dimen/small_padding"
+                        android:textSize="@dimen/default_subtitle" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llcFormKuesionerSuasana"
+                    android:layout_width="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llcFormKuesionerDaerah"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/kuesioner_suasana"/>
+
+
+                    <Spinner
+                        android:id="@+id/spinKSuasana"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_height"
+                        android:background="@drawable/bg_spinner_white_accent_border_rounded"
+                        android:paddingHorizontal="@dimen/small_padding"
+                        android:textSize="@dimen/default_subtitle" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
 
                 <com.apachat.loadingbutton.core.customViews.CircularProgressButton
@@ -415,7 +469,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/llcFormNoTelpContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/llcFormKuesionerSuasana"
                     app:spinning_bar_color="@color/colorWhite"
                     app:spinning_bar_padding="6dp"
                     app:spinning_bar_width="4dp" />

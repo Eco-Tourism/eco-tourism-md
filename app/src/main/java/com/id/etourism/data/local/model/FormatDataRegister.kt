@@ -12,5 +12,7 @@ data class FormatDataRegister(
     val kontak: String? = "",
     val jeniskelamin: String? = "",
     val hobi: String? = "",
-    val email: String? = ""
+    val email: String? = "",
+    val kota: Int?,
+    val suasana: Int?
 ): Parcelable
